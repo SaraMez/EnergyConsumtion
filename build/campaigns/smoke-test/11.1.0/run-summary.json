@@ -1,0 +1,48 @@
+{
+  "version": "11.1.0",
+  "node": "Sara",
+  "site": "lyon",
+  "job_id": null,
+  "metrics": [
+    "wattmetre_power_watt"
+  ],
+  "gradle_command": [
+    "gradlew.bat",
+    "--no-daemon",
+    "--rerun-tasks",
+    "jmhJar",
+    "-PecVersion=11.1.0"
+  ],
+  "jmh_command": [
+    "java",
+    "-jar",
+    "C:\\Users\\saram\\Test_Benchmark_JMH_EclipseCollection\\build\\libs\\jmh-eclipse-benchmark-jmh.jar",
+    "benchmark.List.ListBenchmark.insert_fastList",
+    "-rf",
+    "JSON",
+    "-rff",
+    "build\\campaigns\\smoke-test\\11.1.0\\jmh-results.json",
+    "-o",
+    "build\\campaigns\\smoke-test\\11.1.0\\jmh-human.txt",
+    "-i",
+    "1",
+    "-wi",
+    "1",
+    "-f",
+    "1",
+    "-r",
+    "1s",
+    "-w",
+    "1s",
+    "-tu",
+    "ms",
+    "-bm",
+    "avgt",
+    "-p",
+    "size=1000"
+  ],
+  "started_at": "2026-04-22T16:29:48.989308Z",
+  "ended_at": "2026-04-22T16:30:17.343835Z",
+  "duration_seconds": 28.354527,
+  "exit_code": 0
+}

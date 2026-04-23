@@ -3,25 +3,56 @@ plugins {
     id 'me.champeau.jmh' version '0.7.2'
 }
 
+def stringProp = { String name, String defaultValue = null ->
+    def value = project.findProperty(name)
+    return value == null ? defaultValue : value.toString()
+}
+
+def intProp = { String name, int defaultValue ->
+    return (project.findProperty(name) ?: defaultValue).toString().toInteger()
+}
+
+def csvProp = { String name ->
+    def value = project.findProperty(name)
+    if (value == null) {
+        return []
+    }
+    return value
+        .toString()
+        .split(',')
+        .collect { it.trim() }
+        .findAll { !it.isEmpty() }
+}
+
+ext {
+    ecVersion = project.findProperty("ecVersion") ?: "11.1.0"
+}
+
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.eclipse.collections:eclipse-collections:11.1.0'
 
+dependencies {
     // Annotations JMH (obligatoire pour @Benchmark, @State, etc.)
+    implementation "org.eclipse.collections:eclipse-collections:${ecVersion}"
     jmh 'org.openjdk.jmh:jmh-core:1.37'
     jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }
 
 jmh {
-    iterations = 5
-    warmupIterations = 5
-    fork = 2
-    timeUnit = 'ms'
-    benchmarkMode = ['avgt']
-    resultsFile = project.file("${project.layout.buildDirectory.get()}/reports/jmh/results.txt")
+    iterations = intProp('jmhIterations', 5)
+    warmupIterations = intProp('jmhWarmupIterations', 5)
+    fork = intProp('jmhFork', 2)
+    timeOnIteration = stringProp('jmhTimeOnIteration', '1s')
+    warmup = stringProp('jmhWarmupTime', '1s')
+    timeUnit = stringProp('jmhTimeUnit', 'ms')
+    benchmarkMode = csvProp('jmhBenchmarkMode') ?: ['avgt']
+    includes = csvProp('jmhIncludes')
+    excludes = csvProp('jmhExcludes')
+    resultFormat = stringProp('jmhResultFormat', 'TEXT')
+    humanOutputFile = project.file(stringProp('jmhHumanOutputFile', "${layout.buildDirectory.get()}/reports/jmh/human.txt"))
+    resultsFile = project.file(stringProp('jmhResultsFile', "${layout.buildDirectory.get()}/reports/jmh/results.txt"))
 }
 
 java {

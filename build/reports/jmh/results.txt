@@ -1,3 +1,9 @@
-Benchmark                           Mode  Cnt  Score   Error  Units
-CollectionBenchmark.sumEclipseList  avgt   10  0,044 ± 0,001  ms/op
-CollectionBenchmark.sumJavaList     avgt   10  0,045 ± 0,003  ms/op
+Benchmark                           (size)  Mode  Cnt    Score     Error  Units
+CollectionBenchmark.sumEclipseList     N/A  avgt   10    0,138 ±   0,162  ms/op
+CollectionBenchmark.sumJavaList        N/A  avgt   10    0,082 ±   0,002  ms/op
+EcCpuBenchmark.add_elements          10000  avgt   10    0,068 ±   0,026  ms/op
+EcCpuBenchmark.add_elements         100000  avgt   10    3,216 ±   1,237  ms/op
+EcCpuBenchmark.iterate_and_sum       10000  avgt   10    0,012 ±   0,001  ms/op
+EcCpuBenchmark.iterate_and_sum      100000  avgt   10    0,412 ±   0,721  ms/op
+EcCpuBenchmark.remove_half           10000  avgt   10    1,756 ±   0,571  ms/op
+EcCpuBenchmark.remove_half          100000  avgt   10  339,835 ± 156,862  ms/op
