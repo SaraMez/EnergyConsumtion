@@ -2,6 +2,8 @@ package benchmark.Set;
 
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.eclipse.collections.api.set.MutableSet;
+import org.eclipse.collections.api.block.procedure.Procedure;
+import org.eclipse.collections.api.block.procedure.primitive.IntProcedure;
 import org.eclipse.collections.api.set.primitive.MutableIntSet;
 import org.eclipse.collections.impl.set.mutable.UnifiedSet;
 import org.eclipse.collections.impl.set.mutable.primitive.IntHashSet;
@@ -29,12 +31,11 @@ public class SetBenchmark {
     public void setup() {
         unifiedSet = new UnifiedSet<>(size * 2);
         intHashSet = new IntHashSet(size * 2);
-        immutableSet = unifiedSet.toImmutable();
         for (int i = 0; i < size; i++) {
             unifiedSet.add(i);
             intHashSet.add(i);
         }
-
+        immutableSet = unifiedSet.toImmutable();
 
     }
 
@@ -67,17 +68,17 @@ public class SetBenchmark {
 
     @Benchmark
     public void traverse_unifiedSet_forEach(Blackhole blackhole) {
-        unifiedSet.forEach(blackhole::consume);
+        unifiedSet.forEach((Procedure<Integer>) each -> blackhole.consume(each));
     }
 
     @Benchmark
     public void traverse_immutableSet_forEach(Blackhole blackhole) {
-        immutableSet.forEach(blackhole::consume);
+        immutableSet.forEach((Procedure<Integer>) each -> blackhole.consume(each));
     }
 
     @Benchmark
     public void traverse_intHashSet_forEach(Blackhole blackhole) {
-        intHashSet.forEach(blackhole::consume);
+        intHashSet.forEach((IntProcedure) each -> blackhole.consume(each));
     }
 
     @Benchmark

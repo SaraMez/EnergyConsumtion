@@ -2,6 +2,7 @@ package benchmark.Bag;
 
 import org.eclipse.collections.api.bag.ImmutableBag;
 import org.eclipse.collections.api.bag.MutableBag;
+import org.eclipse.collections.api.block.procedure.Procedure;
 import org.eclipse.collections.impl.bag.mutable.HashBag;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -27,12 +28,10 @@ public class BagBenchmark {
     public void setup() {
         distinctValues = Math.max(1, Math.min(size, 1024));
         hashBag = new HashBag<>(size);
-        immutableBag = hashBag.toImmutable();
         for (int i = 0; i < size; i++) {
             hashBag.add(i % distinctValues);
         }
-
-
+        immutableBag = hashBag.toImmutable();
     }
 
     @Benchmark
@@ -55,7 +54,7 @@ public class BagBenchmark {
 
     @Benchmark
     public void traverse_hashBag_forEach(Blackhole blackhole) {
-        hashBag.forEach(blackhole::consume);
+        hashBag.forEach((Procedure<Integer>) each -> blackhole.consume(each));
     }
 
     @Benchmark
@@ -68,7 +67,7 @@ public class BagBenchmark {
 
     @Benchmark
     public void traverse_immutableBag_forEach(Blackhole blackhole) {
-        immutableBag.forEach(blackhole::consume);
+        immutableBag.forEach((Procedure<Integer>) each -> blackhole.consume(each));
     }
 
     @Benchmark

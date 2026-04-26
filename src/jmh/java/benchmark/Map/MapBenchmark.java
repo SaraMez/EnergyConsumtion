@@ -33,14 +33,13 @@ public class MapBenchmark {
         unifiedMap = new UnifiedMap<>(size * 2);
         intIntMap = new IntIntHashMap(size * 2);
         intObjectMap = new IntObjectHashMap<>(size * 2);
-        immutableMap = unifiedMap.toImmutable();
         for (int i = 0; i < size; i++) {
             int value = i * 3;
             unifiedMap.put(i, value);
             intIntMap.put(i, value);
             intObjectMap.put(i, value);
         }
-
+        immutableMap = unifiedMap.toImmutable();
     }
 
     @Benchmark
