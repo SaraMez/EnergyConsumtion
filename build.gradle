@@ -42,8 +42,8 @@ dependencies {
 
 jmh {
     iterations = intProp('jmhIterations', 5)
-    warmupIterations = intProp('jmhWarmupIterations', 5)
-    fork = intProp('jmhFork', 2)
+    warmupIterations = intProp('jmhWarmupIterations', 2)
+    fork = intProp('jmhFork', 1)
     timeOnIteration = stringProp('jmhTimeOnIteration', '1s')
     warmup = stringProp('jmhWarmupTime', '1s')
     timeUnit = stringProp('jmhTimeUnit', 'ms')

@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Thread)
-@Warmup(iterations = 5, time = 1)
+@Warmup(iterations = 2, time = 1)
 @Measurement(iterations = 5, time = 1)
-@Fork(2)
+@Fork(1)
 public class BagBenchmark {
 
     @Param({"1000", "10000", "100000", "1000000"})

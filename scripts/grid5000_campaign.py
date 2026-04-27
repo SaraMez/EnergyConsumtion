@@ -301,13 +301,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--warmup-iterations",
         type=int,
-        default=5,
+        default=2,
         help="JMH warmup iterations.",
     )
     parser.add_argument(
         "--forks",
         type=int,
-        default=2,
+        default=1,
         help="JMH forks per benchmark.",
     )
     parser.add_argument(
@@ -333,13 +333,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--idle-seconds",
         type=int,
-        default=0,
+        default=30,
         help="Optional idle window collected before each version run.",
     )
     parser.add_argument(
         "--rest-seconds",
         type=int,
-        default=5,
+        default=10,
         help="Rest time after each benchmark run.",
     )
     parser.add_argument(
