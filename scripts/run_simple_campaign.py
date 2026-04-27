@@ -74,6 +74,15 @@ def mean_or_none(values: list[float | None]) -> float | None:
     return (sum(filtered) / len(filtered)) if filtered else None
 
 
+def sample_stdev_or_none(values: list[float | None]) -> float | None:
+    filtered = [value for value in values if value is not None]
+    if len(filtered) < 2:
+        return None
+    mean_value = sum(filtered) / len(filtered)
+    variance = sum((value - mean_value) ** 2 for value in filtered) / (len(filtered) - 1)
+    return math.sqrt(variance)
+
+
 def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
@@ -103,9 +112,13 @@ def write_campaign_summary_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "mean_jmh_score",
         "score_unit",
         "mean_average_power_w",
+        "stdev_average_power_w",
         "mean_idle_average_power_w",
+        "stdev_idle_average_power_w",
         "mean_energy_j",
+        "stdev_energy_j",
         "mean_net_energy_j",
+        "stdev_net_energy_j",
     ]
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -325,14 +338,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--iterations", type=int, default=5)
     parser.add_argument("--warmup-iterations", type=int, default=2)
     parser.add_argument("--forks", type=int, default=1)
-    parser.add_argument("--iteration-time", default="1s")
-    parser.add_argument("--warmup-time", default="1s")
+    parser.add_argument("--iteration-time", default="2s")
+    parser.add_argument("--warmup-time", default="2s")
     parser.add_argument("--time-unit", default="ms")
     parser.add_argument("--benchmark-mode", default="avgt")
-    parser.add_argument("--run-count", type=int, default=2)
-    parser.add_argument("--idle-seconds", type=int, default=30)
-    parser.add_argument("--kwollect-settle-seconds", type=int, default=10)
-    parser.add_argument("--inter-iteration-seconds", type=int, default=15)
+    parser.add_argument("--run-count", type=int, default=4)
+    parser.add_argument("--idle-seconds", type=int, default=45)
+    parser.add_argument("--kwollect-settle-seconds", type=int, default=15)
+    parser.add_argument("--inter-iteration-seconds", type=int, default=20)
     parser.add_argument("--rest-seconds", type=int, default=10)
     parser.add_argument("--skip-kwollect", action="store_true")
     parser.add_argument(
@@ -345,13 +358,26 @@ def parse_args() -> argparse.Namespace:
 
 def summarize_version(version: str, iteration_rows: list[dict[str, Any]]) -> dict[str, Any]:
     successful = [row for row in iteration_rows if row.get("exit_code") == 0]
+    jmh_scores = [row.get("jmh_summary", {}).get("mean_score") for row in successful]
+    benchmark_powers = [
+        row.get("kwollect_benchmark_summary", {}).get("average_power_w") for row in successful
+    ]
+    idle_powers = [
+        row.get("kwollect_idle_summary", {}).get("average_power_w") for row in successful
+    ]
+    benchmark_energies = [
+        row.get("kwollect_benchmark_summary", {}).get("energy_j") for row in successful
+    ]
+    net_energies = [row.get("net_energy_j") for row in successful]
     return {
         "version": version,
         "successful_runs": len(successful),
         "mean_duration_seconds": mean_or_none([row.get("duration_seconds") for row in successful]),
-        "mean_jmh_score": mean_or_none(
-            [row.get("jmh_summary", {}).get("mean_score") for row in successful]
+        "stdev_duration_seconds": sample_stdev_or_none(
+            [row.get("duration_seconds") for row in successful]
         ),
+        "mean_jmh_score": mean_or_none(jmh_scores),
+        "stdev_jmh_score": sample_stdev_or_none(jmh_scores),
         "score_unit": next(
             (
                 row.get("jmh_summary", {}).get("score_unit")
@@ -360,22 +386,14 @@ def summarize_version(version: str, iteration_rows: list[dict[str, Any]]) -> dic
             ),
             None,
         ),
-        "mean_average_power_w": mean_or_none(
-            [
-                row.get("kwollect_benchmark_summary", {}).get("average_power_w")
-                for row in successful
-            ]
-        ),
-        "mean_idle_average_power_w": mean_or_none(
-            [
-                row.get("kwollect_idle_summary", {}).get("average_power_w")
-                for row in successful
-            ]
-        ),
-        "mean_energy_j": mean_or_none(
-            [row.get("kwollect_benchmark_summary", {}).get("energy_j") for row in successful]
-        ),
-        "mean_net_energy_j": mean_or_none([row.get("net_energy_j") for row in successful]),
+        "mean_average_power_w": mean_or_none(benchmark_powers),
+        "stdev_average_power_w": sample_stdev_or_none(benchmark_powers),
+        "mean_idle_average_power_w": mean_or_none(idle_powers),
+        "stdev_idle_average_power_w": sample_stdev_or_none(idle_powers),
+        "mean_energy_j": mean_or_none(benchmark_energies),
+        "stdev_energy_j": sample_stdev_or_none(benchmark_energies),
+        "mean_net_energy_j": mean_or_none(net_energies),
+        "stdev_net_energy_j": sample_stdev_or_none(net_energies),
     }
 
 
