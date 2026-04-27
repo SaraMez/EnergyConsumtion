@@ -8,6 +8,7 @@ import csv
 import json
 import math
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -42,7 +43,22 @@ def parse_timestamp(value: Any) -> float:
     candidate = value.strip()
     if candidate.endswith("Z"):
         candidate = candidate[:-1] + "+00:00"
-    return datetime.fromisoformat(candidate).timestamp()
+    try:
+        return datetime.fromisoformat(candidate).timestamp()
+    except ValueError:
+        match = re.fullmatch(
+            r"(?P<prefix>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})"
+            r"(?:\.(?P<fraction>\d+))?"
+            r"(?P<tz>Z|[+-]\d{2}:\d{2})?",
+            candidate,
+        )
+        if not match:
+            raise
+
+        fraction = (match.group("fraction") or "0")[:6].ljust(6, "0")
+        timezone_part = match.group("tz") or "+00:00"
+        normalized = f"{match.group('prefix')}.{fraction}{timezone_part}"
+        return datetime.strptime(normalized, "%Y-%m-%dT%H:%M:%S.%f%z").timestamp()
 
 
 def short_hostname() -> str:
