@@ -169,5 +169,3 @@ oarsh "$N3" "tail -f ~/TB_R3/run-r3.log"
 Les résultats sont déposés dans `build/campagne/` sur chaque nœud :
 
 - **Fichier JSON** données brutes par version et par itération
-- **Graphique puissance** puissance moyenne (W) par version
-- **Graphique énergie** énergie consommée (J) par version
