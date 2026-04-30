@@ -1,4 +1,4 @@
-# EnergyConsumtion — Benchmark JMH sur Grid5000
+# EnergyConsumtion - Benchmark JMH sur Grid5000
 
 Projet de benchmarking Java (JMH + Eclipse Collections) avec mesure de consommation énergétique, exécuté sur le cluster **Taurus** de Grid5000.
 
