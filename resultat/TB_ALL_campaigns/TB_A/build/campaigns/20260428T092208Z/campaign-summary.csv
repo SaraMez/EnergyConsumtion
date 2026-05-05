@@ -1,0 +1,2 @@
+version,successful_runs,mean_duration_seconds,mean_jmh_score,score_unit,mean_average_power_w,stdev_average_power_w,mean_idle_average_power_w,stdev_idle_average_power_w,mean_energy_j,stdev_energy_j,mean_net_energy_j,stdev_net_energy_j
+8.2.0,2,2060.5576085000002,3.8763232719813665,ms/op,119.01428570328576,0.08930564214239234,89.18294389676532,0.9185946121009803,245345.71421968855,99.99333013219618,61578.767007893955,2061.473151105815

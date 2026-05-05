@@ -1,0 +1,32 @@
+{
+  "version": "10.2.0",
+  "iteration_index": 1,
+  "idle_window": {
+    "start": "2026-04-28T12:47:41.354874Z",
+    "end": "2026-04-28T12:48:11.384974Z"
+  },
+  "started_at": "2026-04-28T12:48:11.385161Z",
+  "ended_at": "2026-04-28T13:22:33.324027Z",
+  "duration_seconds": 2061.938866,
+  "exit_code": 0,
+  "jmh_summary": {
+    "benchmarks": 276,
+    "mean_score": 3.821629115783151,
+    "score_unit": "ms/op"
+  },
+  "kwollect_benchmark_summary": {
+    "samples": 88066,
+    "duration_seconds": 2062.980311870575,
+    "average_power_w": 100.54549073304872,
+    "peak_power_w": 278.5,
+    "energy_j": 207423.36782964485
+  },
+  "kwollect_idle_summary": {
+    "samples": 1315,
+    "duration_seconds": 30.978936910629272,
+    "average_power_w": 72.3874578211477,
+    "peak_power_w": 156.4,
+    "energy_j": 2242.486488962172
+  },
+  "net_energy_j": 58164.85513728473
+}

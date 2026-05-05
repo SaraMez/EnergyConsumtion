@@ -1,0 +1,19 @@
+[
+  {
+    "version": "8.2.0",
+    "successful_runs": 2,
+    "mean_duration_seconds": 2060.5576085000002,
+    "stdev_duration_seconds": 0.7699084699573572,
+    "mean_jmh_score": 3.8763232719813665,
+    "stdev_jmh_score": 0.03085194202469942,
+    "score_unit": "ms/op",
+    "mean_average_power_w": 119.01428570328576,
+    "stdev_average_power_w": 0.08930564214239234,
+    "mean_idle_average_power_w": 89.18294389676532,
+    "stdev_idle_average_power_w": 0.9185946121009803,
+    "mean_energy_j": 245345.71421968855,
+    "stdev_energy_j": 99.99333013219618,
+    "mean_net_energy_j": 61578.767007893955,
+    "stdev_net_energy_j": 2061.473151105815
+  }
+]
